@@ -1,0 +1,58 @@
+@media (max-width: 820px) {
+  .waterfall {
+    column-count: 2;
+  }
+
+  /* 大图预览：整块在屏幕垂直居中（不再贴底） */
+  .modalOverlay {
+    align-items: center;
+    justify-content: center;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    box-sizing: border-box;
+  }
+  .modalStage {
+    position: relative;
+    inset: auto;
+    height: 72vh;
+    width: 100vw;
+    border-radius: 0;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  }
+  .modalExitBtn {
+    top: max(10px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+  }
+  .modalNavBtn {
+    display: none;
+  }
+  .modalImageWrap {
+    border-radius: 0;
+  }
+  /* 大图左右滑动切图：减少浏览器抢走横向手势 */
+  .modalImageWrap--mobileSwipe {
+    touch-action: none;
+  }
+  .paramPanel {
+    left: 12px;
+    right: 12px;
+    top: 52px;
+    width: auto;
+    max-width: none;
+    /* 限制在舞台内高度，避免底部「拍摄于 / 描述」被裁切 */
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .paramPanelHeader {
+    flex-shrink: 0;
+  }
+
+  .paramPanelBody {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
