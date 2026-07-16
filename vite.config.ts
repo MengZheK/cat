@@ -2,7 +2,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: "/",
+  // 本地开发用 `/`；GitHub Pages 子路径用 `/cat/`（由 Actions 注入 VITE_BASE）
+  base: process.env.VITE_BASE || "/",
   plugins: [react()],
   server: {
     port: 5173,
