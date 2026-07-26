@@ -3,8 +3,8 @@ import type { Photo } from "./photoUtils";
 import { migrateSessionToLocal, readLocalJson, writeLocalJson } from "./localStorageCache";
 
 const defaultPhotosUrl = `${import.meta.env.BASE_URL}photos/photos.json`;
-const CACHE_KEY_PREFIX = "kang-cat-photos-json:v2:";
-const CACHE_UPDATED_PREFIX = "kang-cat-photos-updated:v2:";
+const CACHE_KEY_PREFIX = "kang-cat-photos-json:v3:";
+const CACHE_UPDATED_PREFIX = "kang-cat-photos-updated:v3:";
 const LEGACY_SESSION_PREFIX = "kang-cat-photos-json:";
 
 type PhotosContextValue = {
@@ -91,7 +91,7 @@ export function PhotosProvider({ children }: { children: ReactNode }) {
     return () => {
       alive = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 仅 url 变化时重新拉取
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- �?url 变化时重新拉�?
   }, [url]);
 
   return (
