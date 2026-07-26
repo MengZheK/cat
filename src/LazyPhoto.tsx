@@ -1,5 +1,5 @@
 import React from "react";
-import type { PhotoImageVariant } from "./imageUrl";
+import { isVideoSrc, resolvePhotoSrc, type PhotoImageVariant } from "./imageUrl";
 import ProgressiveImage, { type ProgressiveRevealProfile } from "./ProgressiveImage";
 import { useInView } from "./useInView";
 
@@ -43,21 +43,42 @@ export default function LazyPhoto({
   });
 
   const loadEnabled = priority || inView;
+  const video = isVideoSrc(src);
 
   return (
-    <div ref={ref} className="lazyPhotoWrap">
-      <ProgressiveImage
-        src={src}
-        alt={alt}
-        className={className ?? ""}
-        variant={variant}
-        loadEnabled={loadEnabled}
-        placeholderEnabled={placeholder}
-        fetchPriority={fetchPriority ?? (priority ? "high" : "auto")}
-        fit={fit}
-        reveal={reveal}
-        revealDelayMs={revealDelayMs}
-      />
+    <div ref={ref} className={"lazyPhotoWrap" + (video ? " lazyPhotoWrap--video" : "")}>
+      {video ? (
+        loadEnabled ? (
+          <>
+            <video
+              className={"lazyVideo " + (className ?? "")}
+              src={resolvePhotoSrc(src) + "#t=0.1"}
+              muted
+              playsInline
+              preload="metadata"
+              aria-label={alt || "视频"}
+            />
+            <span className="lazyVideoBadge" aria-hidden>
+              ▶
+            </span>
+          </>
+        ) : (
+          <div className="lazyVideoPlaceholder" aria-hidden />
+        )
+      ) : (
+        <ProgressiveImage
+          src={src}
+          alt={alt}
+          className={className ?? ""}
+          variant={variant}
+          loadEnabled={loadEnabled}
+          placeholderEnabled={placeholder}
+          fetchPriority={fetchPriority ?? (priority ? "high" : "auto")}
+          fit={fit}
+          reveal={reveal}
+          revealDelayMs={revealDelayMs}
+        />
+      )}
     </div>
   );
 }

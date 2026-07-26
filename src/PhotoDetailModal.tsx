@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Photo } from "./photoUtils";
-import { preloadPhoto } from "./imageUrl";
+import { isVideoSrc, preloadPhoto, resolvePhotoSrc } from "./imageUrl";
 import ModalPinchZoom from "./ModalPinchZoom";
 import ProgressiveImage from "./ProgressiveImage";
 import useCategories from "./useCategories";
@@ -197,6 +197,27 @@ export default function PhotoDetailModal({
   if (!photo) return null;
 
   const imageAlt = photoAltText(photo);
+  const video = isVideoSrc(photo.src);
+  const media = video ? (
+    <video
+      className="modalImage modalVideo"
+      src={resolvePhotoSrc(photo.src)}
+      controls
+      playsInline
+      autoPlay
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    />
+  ) : (
+    <ProgressiveImage
+      src={photo.src}
+      alt={imageAlt}
+      variant="full"
+      className="modalImage"
+      loadEnabled
+      fetchPriority="high"
+    />
+  );
 
   return (
     <div
@@ -267,14 +288,7 @@ export default function PhotoDetailModal({
                         : "")
                   }
                 >
-                  <ProgressiveImage
-                    src={photo.src}
-                    alt={imageAlt}
-                    variant="full"
-                    className="modalImage"
-                    loadEnabled
-                    fetchPriority="high"
-                  />
+                  {media}
                 </div>
               </ModalPinchZoom>
             ) : (
@@ -288,16 +302,11 @@ export default function PhotoDetailModal({
                       ? "modalImageInner--enterPrev"
                       : "")
                 }
-                onClick={() => setShowParamPanel((v) => !v)}
+                onClick={() => {
+                  if (!video) setShowParamPanel((v) => !v);
+                }}
               >
-                <ProgressiveImage
-                  src={photo.src}
-                  alt={imageAlt}
-                  variant="full"
-                  className="modalImage"
-                  loadEnabled
-                  fetchPriority="high"
-                />
+                {media}
               </div>
             )}
           </div>

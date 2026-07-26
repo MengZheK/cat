@@ -30,13 +30,20 @@ export function resolvePhotoSrc(src: string): string {
   return publicUrl(src);
 }
 
+/** 是否为视频资源（如 cow73.mp4） */
+export function isVideoSrc(src: string): boolean {
+  const path = resolvePhotoSrc(src).split("?")[0] ?? "";
+  return /\.(mp4|webm|mov|m4v)$/i.test(path);
+}
+
 /**
  * 列表/缩略图使用 COS 数据万象压缩；大图预览用原图。
+ * 视频不做图片处理，直接返回原地址。
  * 若桶未开通图片处理，LazyPhoto 会在 onError 时回退到原图。
  */
 export function photoDisplayUrl(src: string, variant: PhotoImageVariant = "full"): string {
   const url = resolvePhotoSrc(src);
-  if (!isCosImageUrl(url)) return url;
+  if (!url || isVideoSrc(src) || !isCosImageUrl(url)) return url;
 
   if (variant === "full") {
     return appendCosProcess(url, "imageMogr2/auto-orient");
@@ -49,6 +56,7 @@ export function photoDisplayUrl(src: string, variant: PhotoImageVariant = "full"
 
 /** 极小模糊图，用于渐进式占位（blur-up） */
 export function photoPlaceholderUrl(src: string): string | null {
+  if (isVideoSrc(src)) return null;
   const url = resolvePhotoSrc(src);
   if (!isCosImageUrl(url)) return null;
   const process = cosPipeline("imageMogr2/thumbnail/48x/format/webp/quality/50/blur/8");
@@ -57,6 +65,7 @@ export function photoPlaceholderUrl(src: string): string | null {
 
 /** 预加载单张图片（用于大图切换） */
 export function preloadPhoto(src: string, variant: PhotoImageVariant = "full"): void {
+  if (isVideoSrc(src)) return;
   const url = photoDisplayUrl(src, variant);
   if (!url) return;
   const img = new Image();

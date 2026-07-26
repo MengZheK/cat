@@ -64,6 +64,36 @@
   min-height: 148px;
 }
 
+.lazyVideo {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  background: #1a1d24;
+}
+
+.lazyVideoPlaceholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #e8ebf0;
+}
+
+.lazyVideoBadge {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
 .progressiveImage {
   position: relative;
   display: block;
