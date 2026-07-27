@@ -3,8 +3,8 @@ import type { Photo } from "./photoUtils";
 import { migrateSessionToLocal, readLocalJson, writeLocalJson } from "./localStorageCache";
 
 const defaultPhotosUrl = `${import.meta.env.BASE_URL}photos/photos.json`;
-const CACHE_KEY_PREFIX = "kang-cat-photos-json:v3:";
-const CACHE_UPDATED_PREFIX = "kang-cat-photos-updated:v3:";
+const CACHE_KEY_PREFIX = "kang-cat-photos-json:v4:";
+const CACHE_UPDATED_PREFIX = "kang-cat-photos-updated:v4:";
 const LEGACY_SESSION_PREFIX = "kang-cat-photos-json:";
 
 type PhotosContextValue = {
