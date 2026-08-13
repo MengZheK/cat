@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import BrandMark from "../BrandMark";
 import ContactCollectionStats from "../ContactCollectionStats";
+import { useVisitCounter } from "../VisitCounter";
 import usePhotos from "../usePhotos";
 import { isSubscribeConfigured, submitPhotoSubscribe } from "../subscribe";
 
@@ -12,6 +13,7 @@ export default function ContactPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [feedback, setFeedback] = useState("");
+  const { siteViews } = useVisitCounter();
 
   const subscribeReady = isSubscribeConfigured();
 
@@ -128,6 +130,20 @@ export default function ContactPage() {
             <span className="contactMailBtnLabel">发送邮件</span>
             <span className="contactMailBtnAddr">{AUTHOR_EMAIL}</span>
           </a>
+        </section>
+
+        <section className="contactCard contactCard--visits" aria-labelledby="visits-heading">
+          <div>
+            <p className="visitCardEyebrow">Site Views</p>
+            <h2 id="visits-heading" className="contactCardTitle">
+              网站访问量
+            </h2>
+            <p className="visitCardText">感谢每一次浏览与停留</p>
+          </div>
+          <div className="visitCardCount" aria-live="polite">
+            <strong>{siteViews ?? "—"}</strong>
+            <span>次访问</span>
+          </div>
         </section>
 
         <p className="contactPageFoot">
